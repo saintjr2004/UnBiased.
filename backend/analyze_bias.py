@@ -98,7 +98,8 @@ Rules:
 
 	# Fetch LLM response text
 	outputText = response.output[0].content[0].text
-
+	print(outputText)
+	
 	# Load JSON data from response
 	try:
 		parsed = json.loads(outputText)
@@ -155,4 +156,5 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 		})
 
 	return merged
+
 

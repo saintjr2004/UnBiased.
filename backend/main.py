@@ -13,6 +13,9 @@ from pydantic import BaseModel
 from typing import List
 from analyze_bias import analyzeBias
 
+# Create fastAPI instance
+app = FastAPI()
+
 # Create CORS middleware permissions
 app.add_middleware(
 	CORSMiddleware,
@@ -20,9 +23,6 @@ app.add_middleware(
 	allow_methods=["*"],
 	allow_headers=["*"],
 )
-
-# Create fastAPI instance
-app = FastAPI()
 
 # Validate user data
 class AnalyzeRequest(BaseModel):
@@ -46,4 +46,5 @@ may be needed for context
 @app.post("/api/analyze-bias")
 async def analyzeBiasEndpoint(req: AnalyzeRequest):
 	return analyzeBias(req.paragraphs)
+
 

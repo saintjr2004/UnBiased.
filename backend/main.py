@@ -33,10 +33,11 @@ async def analyzeBiasEndpoint(req: AnalyzeRequest):
 	return analyzeBias(req.paragraphs)
    
 # Expose Render stuff   
-@app.post("/")
+@app.get("/")
 def root():
 
 	return {"status": "OK", "message": "FastAPI is running on Render"}
+
 
 
 

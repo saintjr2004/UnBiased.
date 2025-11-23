@@ -8,9 +8,18 @@ analyze text for bias.
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 from analyze_bias import analyzeBias
+
+# Create CORS middleware permissions
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
 
 # Create fastAPI instance
 app = FastAPI()
@@ -37,3 +46,4 @@ may be needed for context
 @app.post("/api/analyze-bias")
 async def analyzeBiasEndpoint(req: AnalyzeRequest):
 	return analyzeBias(req.paragraphs)
+

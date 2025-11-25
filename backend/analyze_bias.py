@@ -97,8 +97,7 @@ Rules:
 				max_output_tokens=200000,
 			)
 	except Exception as e:
-		print("[OPENAI ERROR]", e)
-		raise
+		raise RuntimeError(f"[Log] LLM Error...") from e
 
 	# Fetch LLM response text
 	outputText = response.output[0].content[0].text
@@ -108,12 +107,16 @@ Rules:
 	try:
 		parsed = json.loads(outputText)
 	except json.JSONDecodeError as e:
-		raise RuntimeError(f"LLM returned non JSON output: {outputText}") from e
+		raise RuntimeError(f"[Log] LLM returned non JSON output: {outputText}") from e
 
 	if not isinstance(parsed, list):
-		raise RuntimeError(f"LLM output is not a list: {parsed}")
-    
-	print("[Analysis] Successully returned JSON output.")
+		raise RuntimeError(f"[Log] LLM output is not a list: {parsed}")
+
+	if outputText:
+		print("[Log] Successully returned JSON output.")
+	else
+		print("[Log] Recieved no output.")
+	
 	return parsed
 
 """
@@ -162,6 +165,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

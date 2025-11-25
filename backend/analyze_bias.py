@@ -123,6 +123,7 @@ Analyzes bias from an array of string inputs.
 @returns {object[]} - JSON data to be parsed by the frontend
 """
 def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
+	print("[Log] Analyzing...")
 	results: Dict[int, Dict[str, Any]] = {}
 	llmItems: List[Dict[str, Any]] = []
 
@@ -159,7 +160,9 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 			"reason": r["reason"],
 		})
 
+	print("[Log] Done!")
 	return merged
+
 
 
 

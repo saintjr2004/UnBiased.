@@ -96,7 +96,7 @@ Rules:
 						"content": json.dumps(userPayload, ensure_ascii=False)
 					}
 				],
-				temperature=0.0,
+				reasoning={"effort": "low"},
 				max_output_tokens=200000,
 			)
 	except Exception as e:
@@ -171,6 +171,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

@@ -114,7 +114,7 @@ Rules:
 
 	if outputText:
 		print("[Log] Successully returned JSON output.")
-	else
+	else:
 		print("[Log] Recieved no output.")
 	
 	return parsed
@@ -165,6 +165,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

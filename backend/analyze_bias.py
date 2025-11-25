@@ -26,7 +26,7 @@ Calls the OpenAI LLM with a specialized prompt.
 """
 def callBiasLLM(llmItems: List[Dict]) -> List[Dict]:
 	if not llmItems:
-		print("[Log] No items to analyze.", flush=True)
+		print("[Log] No items to analyze.")
 		return []
 
 	print("[Log] Analyzing...")
@@ -100,7 +100,7 @@ Rules:
 				max_output_tokens=4096,
 			)
 	except Exception as e:
-		print("[LLM ERROR]", repr(e), flush=True)
+		print("!! LLM ERROR !!", repr(e))
 		raise
 
 	# Fetch LLM response text
@@ -155,6 +155,8 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 					"label": label,
 					"reason": reason,
 				}
+	else:
+		print("[Log] WARNING: Paragraphs error. Cannot analyze.")
 
 	# Normalize data for js frontend
 	merged = []
@@ -169,6 +171,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

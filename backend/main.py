@@ -12,9 +12,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 from analyze_bias import analyzeBias
+import logging
 
 # Create fastAPI instance
 app = FastAPI()
+
+# Logging (debug)
+logger = logging.getLogger(__name__)
 
 # Create CORS middleware permissions
 app.add_middleware(
@@ -50,7 +54,11 @@ may be needed for context
 """
 @app.post("/api/analyze-bias")
 async def analyzeBiasEndpoint(req: AnalyzeRequest):
-	return analyzeBias(req.paragraphs)
+	logger.info("[Log] Entering endpoint...")
+	result = analyzeBias(req.paragraphs)
+	logger.info("[Log] Exiting endpoint\n\nResult:\n%s", type(result))
+	return result
+
 
 
 

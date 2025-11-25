@@ -34,6 +34,11 @@ async def root():
 
 	return {"status": "OK", "message": "FastAPI is running on Render"}
 
+# Health check
+@app.get("/health")
+async def health():
+	return {"status": "healthy"}
+
 """
 Call the bias analysis function from the fetched paragraphs
 
@@ -46,5 +51,6 @@ may be needed for context
 @app.post("/api/analyze-bias")
 async def analyzeBiasEndpoint(req: AnalyzeRequest):
 	return analyzeBias(req.paragraphs)
+
 
 

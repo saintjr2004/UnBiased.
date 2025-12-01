@@ -57,25 +57,22 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 		 * Inject content script to retrieve the page's HTML source by executing
 		 * document.documentElement.outerHTML inside the tab.
 		 */
+
 		const [{ result: html }] = await chrome.scripting.executeScript({
 			target: { tabId: tab.id },
 			func: () => document.documentElement.outerHTML
 		});
 
-		// Parse HTML source (remove scripts to avoid CSP violations)
-		const domparser = new DOMParser();
-		const docHTML = domparser.parseFromString(html, 'text/html');
-		docHTML.querySelectorAll('script').forEach(s => s.remove());
-
-		// Create iframe context
+		// Create hidden iframe to safely parse HTML without polluting popup DOM
 		const iframe = document.createElement('iframe');
 		iframe.style.display = 'none';
 		document.body.appendChild(iframe);
 
-		// Write HTML to new iframe context
 		const doc = iframe.contentDocument;
+
+		// Write the scraped HTML into the new iframe context
 		doc.open();
-		doc.write(docHTML.documentElement.outerHTML);
+		doc.write(html);
 		doc.close();
 
 		// Load scripts

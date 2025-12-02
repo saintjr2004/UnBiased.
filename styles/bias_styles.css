@@ -1,0 +1,56 @@
+.bias-highlight {
+    cursor: help;
+    border-radius: 3px;
+    padding: 2px 0;
+    transition: background-color 0.3s;
+    color: #000; /* Ensure text is readable */
+}
+
+/* Personal Opinion: Light Gray/Purple-tint */
+.bias-personal-opinion {
+    background-color: #e2e3e5;
+    border-bottom: 2px solid #6c757d;
+}
+
+/* Ad Hominem: Light Red */
+.bias-ad-hominem {
+    background-color: #f8d7da;
+    border-bottom: 2px solid #dc3545;
+}
+
+/* Hasty Generalization: Light Orange */
+.bias-hasty-generalization {
+    background-color: #fff3cd;
+    border-bottom: 2px solid #fd7e14;
+}
+
+/* Strawman: Light Yellow */
+.bias-strawman {
+    background-color: #ffeeba;
+    border-bottom: 2px solid #ffc107;
+}
+
+/* Slippery Slope: Light Blue */
+.bias-slippery-slope {
+    background-color: #cce5ff;
+    border-bottom: 2px solid #0d6efd;
+}
+
+/* Red Herring: Pinkish */
+.bias-red-herring {
+    background-color: #f5c6cb;
+    border-bottom: 2px solid #d63384;
+}
+
+/* Bandwagoning: Light Green */
+.bias-bandwagoning {
+    background-color: #d4edda;
+    border-bottom: 2px solid #198754;
+}
+
+/* Misleading: Darker Red with underline */
+.bias-misleading {
+    background-color: #f1b0b7;
+    border-bottom: 2px solid #842029;
+    text-decoration: underline #842029;
+}

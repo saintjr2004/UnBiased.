@@ -24,13 +24,17 @@
 	],
 	"web_accessible_resources": [
 		{
-			"resources": ["parsers/bbc_parser.js",
-						  "parsers/nbc_parser.js",
-						  "parsers/fox_parser.js",
-						  "parsers/cnn_parser.js",
-						  "parsers/cbs_parser.js",
-						  "parsers/guardian_parser.js",
-						  "popup.js"],
+			"resources": [
+				"parsers/bbc_parser.js",
+				"parsers/nbc_parser.js",
+				"parsers/fox_parser.js",
+				"parsers/cnn_parser.js",
+				"parsers/cbs_parser.js",
+				"parsers/guardian_parser.js",
+				"popup.js",
+				"highlighter.js",
+				"styles/bias_styles.css"
+			],
 			"matches": ["<all_urls>"]
 		}
 	]

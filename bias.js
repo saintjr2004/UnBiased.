@@ -2,14 +2,17 @@
  * This is the logic for detecting biased text
  *
  * @author Jude Rorie
+ * @author Shane Ruegg
  * @date 11/17/2025
+ * @modified 12/01/2025
  *
  */
 
 /**
  * Wrapper function that uses the OpenAI LLM to detect bias in the given paragraphs array.
  *
- * @param {object[]} paragraphs - List of paragraph string objects
+ * @param {string[]} paragraphs - List of paragraph string objects
+ * @returns {Promise<object[]>} - The annotations list
  */
 async function analyzeBias(paragraphs) {
 	try {
@@ -26,11 +29,12 @@ async function analyzeBias(paragraphs) {
 
 		// annotations: [{ index, text, label, reason }, ...]
 		const annotations = await response.json();
-		renderBiasResults(annotations);
 		console.log("[Analysis] Bias analysis complete.");
+		return annotations;
+
 	} catch (error) {
 		console.error(error);
-		output.textContent = "Failed to reach bias analysis.";
+    throw error;
 	}
 }
 
@@ -42,6 +46,8 @@ async function analyzeBias(paragraphs) {
  */
 function renderBiasResults(annotations) {
 	const container = document.getElementById("output");
+	if (!container) return;
+
 	container.innerHTML = "";
 
 	if (!annotations.length) {

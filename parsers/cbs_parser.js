@@ -6,6 +6,7 @@
  *
  * @author Shane Ruegg
  * @date 11/21/2025
+ * @modified 12/01/2025
  *
  */
 
@@ -85,6 +86,7 @@ function parseArticleContent() {
       content.push({
         type: "subheading",
         text: element.textContent.trim(),
+        element: element
       });
     }
 
@@ -97,6 +99,7 @@ function parseArticleContent() {
         content.push({
           type: "paragraph",
           text: text,
+          element: element
         });
       }
     }
@@ -110,6 +113,7 @@ function parseArticleContent() {
           type: "image",
           src: img.src,
           caption: caption ? caption.textContent.trim() : "",
+          element: element
         });
       }
     }
@@ -145,6 +149,6 @@ function parseCBSArticle() {
     } else {
         console.error("Failed to extract any article content.");
     }
-	
+
 	return articleContent;
 }

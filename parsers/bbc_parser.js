@@ -6,6 +6,7 @@
  *
  * @author Shane Ruegg
  * @date 10/13/2025
+ * @modified 12/01/2025
  *
  */
 
@@ -13,7 +14,6 @@
  * Parses the page's embedded JSON-LD metadata script. Which contains
  * the title, author, and description, which is typically not found
  * within the HTML <article> block.
- * 
  * @returns {object|null} An object with metadata or null if not found.
  */
 function parseMetadata() {
@@ -40,10 +40,10 @@ function parseMetadata() {
 }
 
 /**
- * Parses the main content of the article by searching its semantic 
- * structure. It iterates through elements within the main article 
+ * Parses the main content of the article by searching its semantic
+ * structure. It iterates through elements within the main article
  * container and classifies them based on the type of the element.
- * 
+ *
  * @returns {object[]} An array of content objects (e.g., subheading, paragraph).
  */
 function parseArticleContent() {
@@ -63,19 +63,21 @@ function parseArticleContent() {
 		if (element.tagName === 'H2') {
 			content.push({
 				type: 'subheading',
-				text: element.textContent.trim()
+				text: element.textContent.trim(),
+				element: element
 			});
 		}
 
 		// Paragraphs
 		else if (element.tagName === 'P') {
 			const text = element.textContent.trim();
-			
+
 			// Ignore paragraphs that are just bold text holders or empty
 			if (text && element.querySelector('b') === null) {
 				content.push({
 					type: 'paragraph',
-					text: text
+					text: text,
+					element: element
 				});
 			}
 		}
@@ -88,7 +90,8 @@ function parseArticleContent() {
 				content.push({
 					type: 'image',
 					src: img.src,
-					caption: caption ? caption.textContent.trim() : ''
+					caption: caption ? caption.textContent.trim() : '',
+					element: element
 				});
 			}
 		}
@@ -124,6 +127,6 @@ function parseBBCArticle() {
 	} else {
 		console.error("[Parser] Failed to extract any article content.");
 	}
-	
+
 	return articleContent;
 }

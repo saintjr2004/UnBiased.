@@ -2,7 +2,8 @@
  * This is the logic for printing text from the parsers.
  *
  * @author Jude Rorie
- * @date 10/30/2025
+ * @author Shane Ruegg
+ * @date 12/01/2025
  *
  */
 
@@ -12,7 +13,7 @@ const urlText = document.getElementById('url');
 /*
  * Main logic executed once Chrome identifies the active tab.
  * Queries the current active tab, verifies it's a valid news article.
- * injects script to extract HTML, loads custom parser, extracts paragraphs.
+ * injects the specific parser script, and extracts paragraphs.
  *
  * @param {object[]} tabs - Array of active tabs returned by Chrome
  */
@@ -25,12 +26,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
 	const url = tab.url; // Store page URL
 	const parsedUrl = new URL(url);
-	
+
 	urlText.textContent = parsedUrl.origin;
-	
+
 	let site = 'null';
-	
-	// Validate that the tab is a valid news article URL using regex
+
+	// Validate that the tab is a valid news article URL
 	if (url.includes("bbc.co.uk") || url.includes("bbc.com")) {
 		site = 'bbc';
 	} else if (url.includes("nbc") || url.includes("nbcnews.com")) {
@@ -44,7 +45,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 	} else if (url.includes("theguardian.com")) {
 		site = 'guardian';
 	}
-	
+
 	if (site === 'null') {
 		output.textContent = 'This is not a valid article.';
 		return;
@@ -53,125 +54,91 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 	output.textContent = 'Parsing article...';
 
 	try {
-		/**
-		 * Inject content script to retrieve the page's HTML source by executing
-		 * document.documentElement.outerHTML inside the tab.
-		 */
+		// Inject the specific parser file (e.g., parsers/bbc_parser.js)
+		try {
+			await chrome.scripting.executeScript({
+				target: { tabId: tab.id },
+				files: ['parsers/' + site + '_parser.js']
+			});
+		} catch (fileError) {
+			console.warn(`[Popup] Could not inject parser file for ${site}. It might be missing. Proceeding to fallback scraper.`, fileError);
+		}
 
-		const [{ result: html }] = await chrome.scripting.executeScript({
+		// Execute the extraction logic inside the tab
+		const [{ result: paragraphs }] = await chrome.scripting.executeScript({
 			target: { tabId: tab.id },
-			func: () => document.documentElement.outerHTML
+			func: extractArticleContentInTab,
+			args: [site]
 		});
 
-		// Create hidden iframe to safely parse HTML without polluting popup DOM
-		const iframe = document.createElement('iframe');
-		iframe.style.display = 'none';
-		document.body.appendChild(iframe);
-
-		const doc = iframe.contentDocument;
-
-		// Write the scraped HTML into the new iframe context
-		doc.open();
-		doc.write(html);
-		doc.close();
-
-		// Load scripts
-		const script = doc.createElement('script');
-		script.src = chrome.runtime.getURL('parsers/' + site + '_parser.js');
-		
-		// --- script.onload ---
-		/**
-		 * Executes when parser script has loaded inside iframe.
-		 * Attempts custom parsing functions, falls back to raw scraping.
-		 */
-		script.onload = () => {
-			try {
-				// Parse text based on article type
-				let parserFunc;
-				
-				if (site === 'bbc') {
-					parserFunc = doc.defaultView.parseBBCArticle;
-				} else if (site === 'nbc') {
-					parserFunc = doc.defaultView.parseNBCArticle;
-				} else if (site === 'cnn') {
-					parserFunc = doc.defaultView.parseCNNArticle;
-				} else if (site === 'cbs') {
-					parserFunc = doc.defaultView.parseCBSArticle;
-				} else if (site === 'fox') {
-					parserFunc = doc.defaultView.parseFoxArticle;
-				} else if (site === 'guardian') {
-					parserFunc = doc.defaultView.parseGuardianArticle;
-				}
-				
-				let paragraphs = [];
-
-				// If parser function exists, call it
-				if (parserFunc) {
-					const result = parserFunc();
-
-					if (Array.isArray(result)) {
-						console.log("[Parser] Parsing...");
-						paragraphs = result
-						.filter(
-							item =>
-								item &&
-								// Check for strings
-								typeof item.text === "string" &&
-								item.text.trim() &&
-								// Ignore non-text items
-								item.type !== "image" && item.type !== "video" && item.type !== "embed"
-						)
-						.map(item => item.text.trim());
-					}
-					
-					console.log("[Parser] Specialized parser results:", paragraphs);
-				}
-				
-				// Backup parser that just extracts all paragraph elements, in case specialized parser does not work
-				if (!paragraphs || paragraphs.length === 0) {
-					console.warn('[Parser] Falling back to raw paragraph scraping.');
-
-					// Try to detect primary article container elements
-					const article = doc.querySelector(
-						'main article, main [data-component="article-body"], article, [data-component="text-block"]'
-					);
-
-					// If found, collect all <p> text inside
-					if (article) {
-						paragraphs = Array.from(article.querySelectorAll('p'))
-							.map(p => p.innerText.trim())
-							.filter(Boolean);
-					}
-					
-					console.log("[Parser] Backup parser results:", paragraphs);
-				}
-				
-				// Display bias results to user
-				output.textContent = 'Analyzing...';
-				analyzeBias(paragraphs);
-				
-			} catch (error) {
-				console.error('[Parser] Runtime error:', error);
-				output.textContent = 'Error parsing article.';
-			}
-		};
-		
-		// Append parser script to iframe once body exists
-		if (doc.body) {
-			doc.body.appendChild(script);
+		// Handle results
+		if (paragraphs && paragraphs.length > 0) {
+			output.textContent = 'Analyzing...';
+			console.log("[Popup] Extracted paragraphs:", paragraphs);
+			analyzeBias(paragraphs);
 		} else {
-			doc.addEventListener(
-				'DOMContentLoaded',
-				() => {
-					doc.body.appendChild(script);
-				},
-				{ once: true }
-			);
+			output.textContent = 'Could not extract text content.';
+			console.error("[Popup] No paragraphs returned.");
 		}
 
 	} catch (error) {
-		// Catch any script execution failures
-		console.error('[Parser] Execution error:', error);
+		console.error('[Popup] Execution error:', error);
 		output.textContent = 'Execution error.';
 	}
 });
+
+/**
+ * This function runs inside of the web page (content script context).
+ * It attempts to call the specific parser function if it exists,
+ * otherwise it will go to raw scraping.
+ * @param {string} site - The site identifier
+ * @returns {string[]} Array of paragraph strings
+ */
+function extractArticleContentInTab(site) {
+	let rawContent = [];
+	let results = [];
+
+	// Map site names to their global parser functions
+	const parserFunctions = {
+		'bbc': 'parseBBCArticle',
+		'nbc': 'parseNBCArticle',
+		'cbs': 'parseCBSArticle',
+		'fox': 'parseFoxArticle',
+		'cnn': 'parseCNNArticle',
+		'guardian': 'parseGuardianArticle'
+	};
+
+	const funcName = parserFunctions[site];
+
+	// Specialized Parser
+	if (funcName && typeof window[funcName] === 'function') {
+		try {
+			console.log(`[Content] Running ${funcName}...`);
+			rawContent = window[funcName]();
+			// Sanitize for text
+			if (Array.isArray(rawContent)) {
+				results = rawContent.filter(item => item && typeof item.text === 'string' && item.text.trim() && !['image', 'video', 'embed'].includes(item.type)).map(item => item.text.trim());
+			}
+		} catch (e) {
+			console.error("[Content] Specialized parser failed:", e);
+		}
+	}
+
+	// Raw Scraper
+	if (results.length === 0) {
+		console.warn('[Content] Specialized parser returned no text. Using fallback scraper.');
+
+		// Possible article container elements
+		const article = document.querySelector('main article, main [data-component="article-body"], article, [data-component="text-block"], #article-body, [itemprop="articleBody"]');
+
+		if (article) {
+			results = Array.from(article.querySelectorAll('p')).map(p => p.innerText.trim()).filter(text => text.length > 0);
+		} else {
+			// Grab all paragraphs in body
+			console.warn('[Content] No article container found. Scraping all paragraphs.');
+			results = Array.from(document.querySelectorAll('p')).map(p => p.innerText.trim()).filter(text => text.length > 0);
+		}
+	}
+
+	return results;
+}

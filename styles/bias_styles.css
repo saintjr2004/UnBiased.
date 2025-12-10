@@ -8,10 +8,10 @@
 
 /* Personal Opinion: Light Gray/Purple-tint */
 .bias-personal-opinion {
-    background-color: #e2e3e5;
+    background-color: #b9a9c2;
     border-bottom: 2px solid #6c757d;
 }
-
+/* old color #e2e3e5 */
 /* Ad Hominem: Light Red */
 .bias-ad-hominem {
     background-color: #f8d7da;

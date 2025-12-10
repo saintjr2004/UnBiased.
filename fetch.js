@@ -58,6 +58,11 @@ async function fetchSimilarArticles(query, currentUrl = "", limit) {
 		return [];
 	}
 
+	// Truncate query to first few words.
+	const words = query.split(' ');
+	const firstWord = words.slice(0, 4);
+	query = firstWord.join(' ');
+
 	// Build the API URL
 	// Note: We request slightly more articles than needed (limit + 3) to allow deduplication and self-URL filtering later.
 	const url = SIMILAR_ARTICLES_API + "&q=" + query + "&pageSize=" + String(limit + 3) + "&sortBy=relevancy&language=en" + "&apiKey=" + SIMILAR_ARTICLES_API_KEY;

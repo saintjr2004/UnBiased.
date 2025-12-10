@@ -16,7 +16,8 @@ How it works:
 - Feedback isolates factual information
 
 Supplemental Features
--These features enhance core functionaliy and user value
+
+These features enhance core functionaliy and user value
 - Alternative Source Aggregation: After complet scans, extention provides alternate news
 articles from different outlets. Bias from primary article is now cross referenced for
 perspective.
@@ -37,7 +38,8 @@ Developer Instructions:
   click "Load Unpacked" and select extention root directory
   
 Group 14 members list
--Jude Rorie, Charles Tramonte, Aminat Badaru, Shane Ruegg, Khaled Musabeh, Trenton Hew
+
+Jude Rorie, Charles Tramonte, Aminat Badaru, Shane Ruegg, Khaled Musabeh, Trenton Hew
 
 
 

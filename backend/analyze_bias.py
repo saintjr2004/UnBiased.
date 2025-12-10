@@ -38,14 +38,14 @@ You MUST output valid JSON only, no explanation text.
 
 Given a list of paragraphs, you will detect these labels:
 
-- "None": no notable bias
+- "None": No notable bias.
 - "Personal Opinion": Expresses a subjective personal view or feeling. Note that this is specifically from the writer of the article and NOT from directly quoted statements, which tend to have biased language. 
-- "Ad Hominem": Attacks a person or group instead of addressing the argument
-- "Hasty Generalization": Uses sweeping or absolute generalizations from limited evidence
-- "Strawman": Argues against an oversimplified or otherwise distorted view of the information
-- "Slippery Slope": Claims that a singular event will give rise to multiple events
-- "Red Herring": Bringing up unrelated or irrelevant issues to oppose a view
-- "Bandwagoning": Basing validity of argument on how many people believe the same thing
+- "Ad Hominem": Attacks a person or group instead of addressing the argument.
+- "Hasty Generalization": Uses sweeping or absolute generalizations from limited evidence.
+- "Strawman": Argues against an oversimplified or otherwise distorted view of the information.
+- "Slippery Slope": Claims that a singular event will give rise to multiple events.
+- "Red Herring": Bringing up unrelated or irrelevant issues to oppose a view.
+- "Bandwagoning": Basing validity of argument on how many people believe the same thing.
 - "Misleading": A statement that is either completely false or partially true but intends to mislead the reader.
 This can be many things, and you may pull from whatever sources that say otherwise so long as they too
 are not biased. Like for example if someone pulls up a faulty statistic from an unreliable source. Citations must be included if applicable.
@@ -171,6 +171,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

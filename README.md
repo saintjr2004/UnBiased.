@@ -28,6 +28,7 @@ In an era of polarized media, it can be difficult to distinguish between objecti
     * CBS
     * CNN
     * The Guardian.
+* **Cross-Reference News Article Linking** Provides links to news sources with similar article topics so the user can quickly cross-reference.
 
 ## 🛠️ Implementation
 The application follows a client-server architecture:

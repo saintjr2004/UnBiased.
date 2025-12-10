@@ -4,7 +4,8 @@
  * This parser uses extracts metadata and structured
  * content from a CNN News article.
  *
- * @author Khaled Musabeh/Trenton Hew
+ * @author Khaled Musabeh
+ * @author Trenton Hew
  * @date 11/29/2025
  * @modified 12/08/2025
  *

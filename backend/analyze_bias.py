@@ -3,6 +3,7 @@ This is the LLM backend to analyze the text for bias.
 
 @author Jude Rorie
 @date 11/16/2025
+@modified 12/10/2025
 
 """
 
@@ -171,6 +172,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

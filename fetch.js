@@ -60,7 +60,7 @@ async function fetchSimilarArticles(query, currentUrl = "", limit) {
 
 	// Truncate query to first few words.
 	const words = query.split(' ');
-	const firstWord = words.slice(0, 4);
+	const firstWord = words.slice(0, 5);
 	query = firstWord.join(' ');
 
 	// Build the API URL

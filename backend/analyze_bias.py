@@ -144,10 +144,10 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 		llmOutputs = callBiasLLM(llmItems)
 		for item in llmOutputs:
 			idx = item["index"]
-			label = item.get("label", "none")
+			label = item.get("label", "None")
 			reason = item.get("reason", "")
 
-			if label and label != "none":
+			if label and label != "None":
 				# Only add if LLM thinks there's bias
 				results[idx] = {
 					"index": idx,
@@ -171,6 +171,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

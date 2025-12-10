@@ -42,7 +42,7 @@ function normalizeUrl(raw) {
  * @param {string} [currentUrl=""] - The URL of the page being analyzed.
  *		Used to ensure the API does *not* return the same article.
  *
- * @param {number} [limit=3] - The number of similar articles to return. Only the top `limit` items will be returned after sorting/deduping.
+ * @param {int} limit - The number of similar articles to return. Only the top `limit` items will be returned after sorting/deduping.
  *
  * @returns {Promise<Array<{title: string, url: string, source?: string}>>}
  *	- A Promise resolving to an array of objects, each containing:

@@ -1,0 +1,52 @@
+-----------------
+TESTING LOGS
+-----------------
+Jude Rorie
+-----------------
+
+(10/05/25) - Created "hello world!" Prints in the window just fine.
+			 TODO: Start implementing article text scrapers.
+
+(10/28/25) - Testing BBC parser. Text is pulled fine but I am finding that sometimes it will use the fallback scraper as
+			 opposed to the main parser. I should update the logic for that.
+			 TODO: Rely less on fallback parser and use consistent logic for specialized parser.
+
+(11/02/25) - New BBC article functionality. Looks to work fine on most articles I test it on, and the metadata is printing too.
+			 TODO: Implement rest of the parsers.
+			 
+(11/18/25) - Implement Guardian parser. Looks to work fine there too. Shane is good at his job.
+			 TODO: Implement NBC parser. Start creating backend.
+			 
+(11/20/25) - Creating the backend. I'm new to Render so there's a lot here that may need testing. Bias detection is added but for whatever reason
+			 I'm not getting any of the fetch calls from OpenAI even though I configured a key and everything. I'll test more tomorrow. NBC parser is
+			 also implemented and working as intended.
+			 TODO: Finalize setup of backend. Maybe think about proper UI.
+			
+(11/21/25) - This backend stuff is confusing. I'm using POST method but I'm seeing GET in the logs. What is causing this? I don't know. But I only
+			 see one GET method and it is for the exposing of FastAPI, but the URL it is grabbing is not /api/. I'll further specialize the prompt
+			 in the meantime but I don't think it'll go anywhere. Apart from that, I gave the extension a name (UnBiased.) and updated its UI. I felt
+			 a nice lowkey minimalistic look would suit it well. I like it a lot.
+			 TODO: Fix this server error
+
+(11/23/25) - Added Shane's CBS parser PR. Works as intended. Still stuck on this Render server stuff. Tried to implement CORS middleware but apparently that
+			 won't solve anything regarding this hidden GET. I'm still not sure where it comes from.
+			 TODO: Still fix this server error and implement rest of parsers. I'm going insane
+			 
+(11/25/25) - I figured out the issue, Render does health checks every 5 seconds and uses its own GET method. I needed to configure a path for it, so I did, and
+			 now that works fine. However, I'm consistently getting "No Obvious Bias" results even on pages with clear bias now. After checking the console, I
+			 found that the parsers just aren't being used at all now. How? I'm not sure, but that should be an easy fix I suppose since it is a frontend thing.
+			 Also I wanted to configure some things about the OpenAI model, particularly its token output maximums and its prompt, I'm noticing its picking up bias
+			 statements from quotes, which alone isn't bias. I will further engineer this to instead take these quotes as context for other potential bias depending
+			 on how the author intends to use them.
+			 TODO: Fine tune model and implement rest of parsers.
+			 
+(12/01/25) - Implemented Shane's highlighter logic, also works as intended. I fixed the parser logic as well so we are using the specialized parsers instead of the scrapers.
+			 Finally, this is going somewhere. The prompt is mostly doing its job, but there are still some inconsistencies. I will have to further engineer the prompt.
+			 
+(12/09/25) - Final prompt changes. These ones I think will be final. Or at least ones that need the least amount of changing. It works fine, and Shane's iframe logic makes the
+			 window spew less errors, so less stuff for me to worry about. Khaled's CNN parser also works as intended. Other group members are working on the presentation and finalizing
+       some last-minute bug fixes, which there hopefully aren't many since I haven't found much.
+
+(12/10/25) - Final testing processes. Creating article fetching was at first inconsistent since I was searching using the entire article's
+			 title. I switched to using a truncated article title, and it appears to work fine, at least more consistently. The article rendering
+			 was also pretty simple, although I moved the url to the bottom box for appearance purposes. Thank god everything appears to be done.

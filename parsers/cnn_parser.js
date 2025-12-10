@@ -1,8 +1,8 @@
 /**
- * This is the parser for Fox News.
+ * This is the parser for CNN News.
  *
  * This parser uses extracts metadata and structured
- * content from a Fox News article.
+ * content from a CNN News article.
  *
  * @author Khaled Musabeh
  * @date 11/29/2025

@@ -16,9 +16,9 @@
  * within the HTML <article> block.
  * @returns {object|null} An object with metadata or null if not found.
  */
-function parseMetadata() {
+function parseBBCMetadata() {
 	const metadataScript = document.querySelector('script[type="application/ld+json"]');
-
+	
 	if (!metadataScript) {
 		console.error("[Parser] Could not find the JSON-LD metadata script.");
 		return null;
@@ -26,6 +26,20 @@ function parseMetadata() {
 
 	try {
 		const metadata = JSON.parse(metadataScript.textContent);
+		
+		if (metadata === null) {
+			console.error("Could not find the JSON-LD metadata.");
+			return null;
+		} else {
+			console.log("--- Summary Info ---");
+			console.log(`Title: ${metadata.title}`);
+			console.log(`Author: ${metadata.author}`);
+			console.log(`Description: ${metadata.description}`);
+			console.log(`Published: ${metadata.datePublished}`);
+			console.log(`Modified: ${metadata.dateModified}`);
+			console.log("\n");
+		}
+		
 		return {
 			title: metadata.headline || "Title not found",
 			author: metadata.author && metadata.author[0] ? metadata.author[0].name : "Author not found",
@@ -46,7 +60,7 @@ function parseMetadata() {
  *
  * @returns {object[]} An array of content objects (e.g., subheading, paragraph).
  */
-function parseArticleContent() {
+function parseBBCArticleContent() {
 	const articleContainer = document.querySelector('main article, main [data-component="article-body"]');
 
 	if (!articleContainer) {
@@ -97,36 +111,12 @@ function parseArticleContent() {
 		}
 	});
 
-	return content;
-}
-
-// --------------------------------------------------------------
-// ------------------------Main Execution------------------------
-// --------------------------------------------------------------
-
-/**
- * Temporary formatting function for testing, and POC.
- */
-function parseBBCArticle() {
-	const summaryInfo = parseMetadata();
-	const articleContent = parseArticleContent();
-
-	if (summaryInfo) {
-		console.log("--- Summary Info ---");
-		console.log(`Title: ${summaryInfo.title}`);
-		console.log(`Author: ${summaryInfo.author}`);
-		console.log(`Description: ${summaryInfo.description}`);
-		console.log(`Published: ${summaryInfo.datePublished}`);
-		console.log(`Modified: ${summaryInfo.dateModified}`);
-		console.log("\n");
-	}
-
-	if (articleContent.length > 0) {
+	if (content.length > 0) {
 		console.log("--- Article Content ---");
-		console.log(articleContent);
+		console.log(content);
 	} else {
 		console.error("[Parser] Failed to extract any article content.");
 	}
-
-	return articleContent;
+	
+	return content;
 }

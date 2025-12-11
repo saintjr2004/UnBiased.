@@ -1,11 +1,10 @@
 /**
- * This is the parser for CNN News.
+ * This is the parser for Fox News.
  *
  * This parser uses extracts metadata and structured
- * content from a CNN News article.
+ * content from a Fox News article.
  *
  * @author Khaled Musabeh
- * @author Trenton Hew
  * @date 11/29/2025
  * @modified 12/08/2025
  *
@@ -17,7 +16,7 @@
  * within the HTML <article> block.
  * @returns {object|null} An object with metadata or null if not found.
  */
-function parseMetadata() {
+function parseCNNMetadata() {
 	const metadataScript = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));
 
 	if (!metadataScript) {
@@ -47,7 +46,18 @@ function parseMetadata() {
 		}
 	}
 
-	if (!metadata) return null;
+	if (metadata === null) {
+		console.error("Could not find the 'NewsArticle' JSON-LD metadata.");
+		return null;
+	} else {
+		console.log("--- Summary Info ---");
+		console.log(`Title: ${metadata.title}`);
+		console.log(`Author: ${metadata.author}`);
+		console.log(`Description: ${metadata.description}`);
+		console.log(`Published: ${metadata.datePublished}`);
+		console.log(`Modified: ${metadata.dateModified}`);
+		console.log("\n");
+	}
 
 	const author = (() => {
 		if (!metadata.author) return "Author not found";
@@ -75,7 +85,7 @@ function parseMetadata() {
  * container and classifies them based on the type of the element.
  * @returns {object[]} An array of content objects (e.g., subheading, paragraph).
  */
-function parseArticleContent() {
+function parseCNNArticleContent() {
 	let articleContainer =
 		document.querySelector('main article') ||
 		document.querySelector('article') ||
@@ -148,36 +158,12 @@ function parseArticleContent() {
 		}
 	});
 
-	return content;
-}
-
-// --------------------------------------------------------------
-// ------------------------Main Execution------------------------
-// --------------------------------------------------------------
-
-/**
- * Temporary formatting function for testing, and POC.
- */
-function parseCNNArticle() {
-	const summaryInfo = parseMetadata();
-	const articleContent = parseArticleContent();
-
-	if (summaryInfo) {
-		console.log("--- Summary Info ---");
-		console.log(`Title: ${summaryInfo.title}`);
-		console.log(`Author: ${summaryInfo.author}`);
-		console.log(`Description: ${summaryInfo.description}`);
-		console.log(`Published: ${summaryInfo.datePublished}`);
-		console.log(`Modified: ${summaryInfo.dateModified}`);
-		console.log("\n");
-	}
-
-	if (articleContent.length > 0) {
+	if (content.length > 0) {
 		console.log("--- Article Content ---");
-		console.log(articleContent);
+		console.log(content);
 	} else {
 		console.error("[Parser] Failed to extract any article content.");
 	}
-
-	return articleContent;
+	
+	return content;
 }

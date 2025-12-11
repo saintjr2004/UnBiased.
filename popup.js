@@ -100,8 +100,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 						similarContainer.textContent = "Finding similar articles...";
 					}
 
-					// Grab parsed URL, fetch 3 similar articles. Search using title first, and if there are no results then search with description.
-					let similar = await fetchSimilarArticles(metadata.title, tab.url, 3) || await fetchSimilarArticles(metadata.description, tab.url, 3);
+					// Grab parsed URL, fetch 3 similar articles.
+					const similar = await fetchSimilarArticles(metadata.description, tab.url, 3);
 					
 					// Render UI similar article results
 					renderSimilarArticles(similar);

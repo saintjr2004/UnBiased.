@@ -72,7 +72,7 @@ Rules:
 - ALWAYS include an entry for every paragraph you receive.
 - Use "None" when no bias type clearly applies.
 - Keep "Reason" short (1-2 sentences).
-- DO NOT detect bias from quoted statements. They do not reflect the article writer's thoughts, which is what we are specifically detecting. If you detect bias from a statement like '"This is very bad," said John Doe.' then ignore and place "None" on the label.
+- DO NOT detect bias from quoted statements. They do not reflect the article writer's thoughts, which is what we are specifically detecting. If you detect bias from a statement like '"This is very bad," said John Doe.' then ignore and place "None" on the label. If that does not work, for easier fallback detection, just place "None" on results that are wrapped entirely in quotes.
 """
 
 	# Set up JSON table from paragraphs list
@@ -172,6 +172,7 @@ def analyzeBias(paragraphs: List[str]) -> List[Dict[str, Any]]:
 
 	print("[Log] Done!")
 	return merged
+
 
 
 

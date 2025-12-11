@@ -7,7 +7,7 @@
  */
 
 // Use NewsAPI to search for articles.
-let SIMILAR_ARTICLES_API = "https://newsapi.org/v2/everything?domains=bbc.com,bbc.co.uk,nbcnews.com,cbsnews.com,foxnews.com,cnn.com,theguardian.com";
+const SIMILAR_ARTICLES_API = "https://newsapi.org/v2/everything?domains=bbc.com,bbc.co.uk,nbcnews.com,cbsnews.com,foxnews.com,cnn.com,theguardian.com";
 const SIMILAR_ARTICLES_API_KEY = "0ddbde40ee704c2fa9da939d5d6fe434";
 
 /**
@@ -65,7 +65,7 @@ async function fetchSimilarArticles(query, currentUrl = "", limit) {
 
 	// Build the API URL
 	// Note: We request slightly more articles than needed (limit + 3) to allow deduplication and self-URL filtering later.
-	const url = SIMILAR_ARTICLES_API + "&q=" + query + "&pageSize=" + String(limit + 3) + "&sortBy=relevancy&language=en" + "&apiKey=" + SIMILAR_ARTICLES_API_KEY;
+	const url = SIMILAR_ARTICLES_API + "&q=" + query + "&pageSize=" + String(limit + 3) + "&sortBy=relevancy&language=en&apiKey=" + SIMILAR_ARTICLES_API_KEY;
 
 	let resp;
 	try {
@@ -125,7 +125,11 @@ async function fetchSimilarArticles(query, currentUrl = "", limit) {
 
 	// Return at most `limit` articles in the final trimmed list.
 	console.log("[Fetch] API URL:", url);
-	console.log("[Fetch] Returned articles:", deduped);
+	if (deduped.length === 0) {
+		console.log("[Fetch] No search results found.");
+	} else {
+		console.log("[Fetch] Returned articles:", deduped);
+	}
 	return deduped;
 }
 
